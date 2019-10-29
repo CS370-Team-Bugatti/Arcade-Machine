@@ -1,0 +1,2 @@
+Game selected: 'Testgame'
+Score: '50'
