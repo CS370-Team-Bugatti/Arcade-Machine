@@ -1,5 +1,6 @@
 #include "Arcade.h"
 #include "Testgame.h"
+#include "Communicator.h"
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -37,7 +38,8 @@ void Arcade::selectGame() {
 	clog << "Welcome to the Arcade Machine!\nOptions:\n1) Testgame\n2) Quit\n";
 	int choice;
 	cout << "Choice => ";
-	cin >> choice;
+	Communicator initialInputter;
+	choice = initialInputter.get();
 	if (choice == 1) {
 		clog << "'" << choice << "' selected.\n";
 		game_selection = "Testgame";
