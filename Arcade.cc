@@ -1,5 +1,6 @@
 #include "Arcade.h"
 #include "Testgame.h"
+#include "Game1.h"
 #include "Communicator.h"
 #include <iostream>
 #include <sstream>
@@ -9,7 +10,7 @@ using namespace std;
 
 // default constructor
 Arcade::Arcade() {
-	cout << "LOG: Arcade.cc: constructor called\n";
+//	cout << "LOG: Arcade.cc: constructor called\n";
 	game_selection = "no_selection";
 	score = 0;
 	record = "no_record";
@@ -17,7 +18,7 @@ Arcade::Arcade() {
 
 // starts the Arcade Machine
 void Arcade::run() {
-	cout << "LOG: Arcade.cc: run() method called\n";
+//	cout << "LOG: Arcade.cc: run() method called\n";
 
 	selectGame(); // get game
 	
@@ -34,30 +35,39 @@ void Arcade::run() {
 
 // present options to user and get selection
 void Arcade::selectGame() {
-	clog << "LOG: Arcade.cc: selectGame() method called\n";
-	clog << "Welcome to the Arcade Machine!\nOptions:\n1) Testgame\n2) Quit\n";
+//	clog << "LOG: Arcade.cc: selectGame() method called\n";
+	cout << "\n\n------------------------------------------------------\n\n";
+	cout << "Welcome to the Arcade Machine!\n\n";
+	cout << "Options:\n\n";
+	cout << "0) Test\n\n";
+	cout << "1) Quiz\n\n";
+	cout << "2) Exit";
+	cout << "\n\n------------------------------------------------------\n\n";
 	int choice;
 	cout << "Choice => ";
 	Communicator initialInputter;
 	choice = initialInputter.get();
-	if (choice == 1) {
+	if (choice == 0) {
 		clog << "'" << choice << "' selected.\n";
 		game_selection = "Testgame";
 		
+	}
+	else if (choice == 1) {
+		clog << "'" << choice << "' selected.\n";
+		game_selection = "quiz";
 	}
 	else if (choice == 2) {
 		cout << "'" << choice << "' selected. Exiting!\n";
 		exit(1);
 	}
 	else {
-		cerr << "Error! '" << choice << "' wasn't an option! Please try again.\n";
-		exit(2);
+		game_selection = "no_selection";
 	}
 }
 
 // loads instance of selected game type
 int Arcade::executeGame() {
-	clog << "LOG: Arcade.cc: executeGame() method called\n";
+//	clog << "LOG: Arcade.cc: executeGame() method called\n";
 
 	int temp = 0;
 
@@ -65,8 +75,13 @@ int Arcade::executeGame() {
 		Testgame Game;
 		temp = Game.run();
 	}
+	else if (game_selection == "quiz") {
+		Quiz Game;
+		const string name = "Easy-History.txt";
+		temp = Game.runGame(name);
+	}
 	else if (game_selection == "no_selection") { // this shouldn't run
-		cerr << "ERROR: No selection made! Exiting!\n";
+		cout << "ERROR: No selection made! Exiting!\n";
 		exit(3);
 	}
 	// MORE OPTIONS LATER

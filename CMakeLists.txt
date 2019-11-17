@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.13.4)
 
 # Using -Wall is required:
 add_compile_options(-Wall)
@@ -16,6 +16,6 @@ add_compile_options(-Wunused-const-variable=1 -Wzero-as-null-pointer-constant)
 
 # add_compile_options must be BEFORE add_executable or add_library.
 
-add_library(Arcade Arcade.cc Communicator.cc Testgame.cc)
+add_library(Arcade Arcade.cc Communicator.cc Testgame.cc Game1.cc)
 add_executable(starter starter.cc)
 target_link_libraries(starter Arcade)
