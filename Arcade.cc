@@ -1,6 +1,7 @@
 #include "Arcade.h"
 #include "Testgame.h"
 #include "Game1.h"
+#include "Game2.h"
 #include "Communicator.h"
 #include <iostream>
 #include <sstream>
@@ -57,6 +58,10 @@ void Arcade::selectGame() {
 		game_selection = "quiz";
 	}
 	else if (choice == 2) {
+		clog << "'" << choice << "' selected.\n";
+		game_selection = "motion";
+	}
+	else if (choice == 3) {
 		cout << "'" << choice << "' selected. Exiting!\n";
 		exit(1);
 	}
@@ -79,6 +84,10 @@ int Arcade::executeGame() {
 		Quiz Game;
 		const string name = "Easy-History.txt";
 		temp = Game.runGame(name);
+	}
+	else if (game_selection == "motion") {
+		ReflexGame Game;
+		temp = Game.runGame();
 	}
 	else if (game_selection == "no_selection") { // this shouldn't run
 		cout << "ERROR: No selection made! Exiting!\n";
