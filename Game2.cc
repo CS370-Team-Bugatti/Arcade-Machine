@@ -23,8 +23,9 @@ int ReflexGame::runGame(){
 	cout << "\033[2;1H\033[J";
 	cout << "Difficulty: " << difficultyStr << "\n";
 	cout << warning << "\n";
-	//print reactors
 	
+	gameStart();
+
 	return score;
 }
 
@@ -91,6 +92,87 @@ void ReflexGame::printSelection(){
 		}
 	}
 	difficulty = input;
+}
+
+void ReflexGame::gameStart(){
+	//start the curse reader for keyboard escaping
+	initscr();
+	//create reactors array
+	//get the first random number
+	//print the first random number and add it to reactors
+	//http://www.cplusplus.com/forum/beginner/91449/
+	bool cont = true;
+	
+	//this is used with changeTime
+	bool warned = false;
+
+	initializeTimeChange(timeChange, changeTimeMS);
+	auto currentTime = chrono::system_clock::now().time_since_epoch();
+	//5000 is a placeholder, change to 120000 for 2 minutes
+	auto endTime = currentTime + chrono::milliseconds(30000);
+
+	auto nextChangeTime = currentTime + chrono::milliseconds(10000);
+
+	//set the time in milliseconds for changes
+	auto staticChangeTime = chrono::milliseconds(10000);
+	//set the time in milliseconds for warn time
+	auto staticWarnTime = staticChangeTime - chrono::milliseconds(changeTimeMS);
+
+	auto nextWarnTime = currentTime + staticWarnTime;
+
+	while ( cont ){
+		
+		//check if warning needs to be made
+		if (timeChange && (currentTime >= nextWarnTime) && !warned){
+			cout << "here in warn" << endl;
+			warned = true;
+			//print the warning line
+			//TODO
+		}
+
+		//every 10 seconds, change array
+		if (currentTime >= nextChangeTime && warned){
+			cout << "here in change array" << endl;
+			//clear the warning line
+			//TODO
+			//set the next change time
+			nextWarnTime = nextChangeTime + staticWarnTime;
+			nextChangeTime = nextChangeTime + chrono::milliseconds(10000);
+			warned = false;
+		}
+		
+
+		//update the current time
+		currentTime = chrono::system_clock::now().time_since_epoch();
+
+		//end if needed
+		if ( currentTime >= endTime ){
+			cont = false;
+		}
+	}
+	
+	
+	cout << "Game End\n";
+	//print statistics
+	endwin();
+}
+
+void ReflexGame::initializeTimeChange(bool& timeChange, int& changeTime){
+	timeChange = true;
+	if (difficulty == 1){
+		//4 second warning
+		changeTime = 4000;
+	}else if (difficulty == 2){
+		//2 second warning
+		changeTime = 2000;
+	}else{
+		timeChange = false;
+		changeTime = 0;
+	}
+}
+
+void ReflexGame::printReactors(){
+
 }
 
 int main(){
