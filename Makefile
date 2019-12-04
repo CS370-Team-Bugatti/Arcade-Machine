@@ -1,0 +1,47 @@
+# List of files
+EXE		= starter
+C_OBJS		= $(patsubst %.cc, %.o, $(wildcard *.cc))
+C_HEADERS	= $(wildcard *.h)
+OBJS		= ${C_OBJS} 
+
+# Compiler and loader commands and flags
+CC		= g++
+CC_FLAGS	= -g -Wall -c
+LD_FLAGS	= -g -Wall -lncurses
+
+# Target is the executable
+# Make default will try to complete $(EXE)
+default: $(EXE)
+all: default
+
+#create executable object, name defined in EXE
+$(EXE): $(C_OBJS)
+	$(CC) $(C_OBJS) $(LD_FLAGS) -o $@
+###first line loads the $(C_OBJS), which will call to the function below
+###second line compiles all of the files into an executable with the name stored in EXE
+
+# Compile .c files to .o files
+%.o:	%.c $(C_HEADERS)
+	$(CC) $(CC_FLAGS) $< -c $@
+
+### in $(EXE), loading $(C_OBJS) does $(patsubst %.c, %.o, $(wildcard *.c))
+### %.c then becomes all .c files, while %.o calls its function above.
+### loads the .c files and its headers, then compiles the .o files and loads it to %.o
+
+# Clean up the directory
+clean:
+	rm -f *.o *~ $(EXE) 
+
+# Test the program
+
+test:
+	make
+	./start
+
+# Package the directory
+package:
+	tar -cvf Joshua-Welch-HW1.tar Game2.h Game2.cc
+	
+# Unpack the tar file
+unpack: 
+	tar -xvf Joshua-Welch-HW1.tar

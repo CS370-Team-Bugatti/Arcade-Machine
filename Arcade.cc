@@ -42,7 +42,8 @@ void Arcade::selectGame() {
 	cout << "Options:\n\n";
 	cout << "0) Test\n\n";
 	cout << "1) Quiz\n\n";
-	cout << "2) Exit";
+	cout << "2) Motion\n\n";
+	cout << "3) Exit";
 	cout << "\n\n------------------------------------------------------\n\n";
 	int choice;
 	cout << "Choice => ";
@@ -82,6 +83,9 @@ int Arcade::executeGame() {
 	}
 	else if (game_selection == "quiz") {
 		Quiz Game;
+		
+		// Ofe, this is where it is added!
+		
 		const string name = "Easy-History.txt";
 		temp = Game.runGame(name);
 	}

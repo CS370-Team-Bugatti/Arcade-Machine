@@ -174,9 +174,10 @@ void ReflexGame::initializeTimeChange(bool& timeChange, int& changeTime){
 void ReflexGame::printReactors(){
 
 }
-
+/*
 int main(){
 	ReflexGame game;
 	game.runGame();
 	return 0;
 }
+*/
