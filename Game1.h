@@ -23,6 +23,8 @@ class Quiz{
 	void PrintScore();
 	std::vector<Question> choices;
 	int score;
+    private:
+	bool ansB(int size, int anss);
 };//end of format class
 
 //std::ostream &operator<<(std::ostream &out, const Format quest);
