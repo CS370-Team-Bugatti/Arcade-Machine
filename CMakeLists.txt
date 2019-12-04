@@ -16,6 +16,6 @@ add_compile_options(-Wunused-const-variable=1 -Wzero-as-null-pointer-constant)
 
 # add_compile_options must be BEFORE add_executable or add_library.
 
-add_library(Arcade Arcade.cc Communicator.cc Testgame.cc Game1.cc)
+add_library(Arcade Arcade.cc Communicator.cc Testgame.cc Game1.cc Game2.cc)
 add_executable(starter starter.cc)
 target_link_libraries(starter Arcade)
