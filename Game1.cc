@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-#include<string>
+#include <string>
 
 using namespace std;
 
@@ -50,7 +50,11 @@ void Question::PrintQA(){
 }//end of method
 	
 void Question::PrintA(){
-	std::cout << choice[ans - 1] << '\n';
+	//std::cout << '\n' << choice[ans - 1] << '\n';
+	string a = choice[ans - 1];
+	int ind = a.find_first_of('.');
+	string sub = a.substr(ind+1);
+	cout << sub << '\n';
 }//end of method
 
 bool Question::answerCheck(int ansO){
@@ -70,6 +74,7 @@ void Quiz::PrintScore(){
 
 int Quiz::runGame(const std::string fileName){
 	std::ifstream file(fileName);
+	cout << "\033[2J\033[1;1H\n";
 	cout << "Lets begin the Quiz!!!\n";
 	while(file){
 		Question q;
@@ -78,13 +83,15 @@ int Quiz::runGame(const std::string fileName){
 	}
 	int responce;
 	for(int i = 0; i < 6; i++){
+		cout << "\033[2J\033[1;1H\n";
 		Question qq = choices[rand() % choices.size()];
 		qq.PrintQA();
-                cout << "choose your answer\n";
+                cout << "Choose your answer: ";
 		cin >> responce;
 		int s = qq.choice.size();
 		while(ansB(s,responce)){
 			cout << "Choice out of range Try again\n";
+			cout << "\033[2J\033[1;1H\n";
 			qq.PrintQA();
 			cin >> responce;
 		}//end of while loop
