@@ -83,9 +83,7 @@ int Arcade::executeGame() {
 	}
 	else if (game_selection == "quiz") {
 		Quiz Game;
-		//cout << "Select from the following subjects:\n";
-		//const string name = "Questions.txt";
-		temp = Game.run(name);
+		temp = Game.run();
 	}
 	else if (game_selection == "motion") {
 		ReflexGame Game;
