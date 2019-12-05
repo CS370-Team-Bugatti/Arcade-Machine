@@ -83,10 +83,8 @@ int Arcade::executeGame() {
 	}
 	else if (game_selection == "quiz") {
 		Quiz Game;
-		
-		// Ofe, this is where it is added!
-		
-		const string name = "Easy-History.txt";
+		//cout << "Select from the following subjects:\n";
+		const string name = "Questions.txt";
 		temp = Game.runGame(name);
 	}
 	else if (game_selection == "motion") {
