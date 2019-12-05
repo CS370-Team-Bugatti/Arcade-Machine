@@ -10,6 +10,7 @@ ReflexGame::ReflexGame(){
 	score = 0;
 	difficultyStr = "";
 	warning = "Game Start";
+	vectorMax = 0;
 }//end of constructor
 
 int ReflexGame::runGame(){
@@ -100,7 +101,6 @@ void ReflexGame::gameStart(){
 	//create reactors array
 	//get the first random number
 	//print the first random number and add it to reactors
-	//http://www.cplusplus.com/forum/beginner/91449/
 	bool cont = true;
 	
 	//this is used with changeTime
@@ -109,7 +109,7 @@ void ReflexGame::gameStart(){
 	initializeTimeChange(timeChange, changeTimeMS);
 	auto currentTime = chrono::system_clock::now().time_since_epoch();
 	//5000 is a placeholder, change to 120000 for 2 minutes
-	auto endTime = currentTime + chrono::milliseconds(30000);
+	auto endTime = currentTime + chrono::milliseconds(120000);
 
 	auto nextChangeTime = currentTime + chrono::milliseconds(10000);
 
@@ -119,41 +119,42 @@ void ReflexGame::gameStart(){
 	auto staticWarnTime = staticChangeTime - chrono::milliseconds(changeTimeMS);
 
 	auto nextWarnTime = currentTime + staticWarnTime;
-
-	while ( cont ){
-		
+	
+	if (difficulty == 1){
+		vectorMax = 2;
+	}else if (difficulty == 2){
+		vectorMax = 3;
+	}else{
+		vectorMax = 5;
+	}
+	
+	changeReactors();
+	while ( currentTime < endTime ){
 		//check if warning needs to be made
 		if (timeChange && (currentTime >= nextWarnTime) && !warned){
-			cout << "here in warn" << endl;
+			auto seconds = changeTimeMS/1000;
+			cout << "\033[3;1HWarning: Reactors change in "<< seconds <<" seconds!\033[4;1H" << endl;
 			warned = true;
-			//print the warning line
-			//TODO
 		}
-
+		//update the current time
+		currentTime = chrono::system_clock::now().time_since_epoch();
 		//every 10 seconds, change array
-		if (currentTime >= nextChangeTime && warned){
-			cout << "here in change array" << endl;
-			//clear the warning line
-			//TODO
-			//set the next change time
+		if (currentTime >= nextChangeTime && warned){		
+			cout << "\033[3;1H\033[2K" << "\033[3;1H" << endl;
 			nextWarnTime = nextChangeTime + staticWarnTime;
 			nextChangeTime = nextChangeTime + chrono::milliseconds(10000);
 			warned = false;
+			changeReactors();
 		}
-		
-
 		//update the current time
 		currentTime = chrono::system_clock::now().time_since_epoch();
-
-		//end if needed
-		if ( currentTime >= endTime ){
-			cont = false;
-		}
 	}
 	
 	
 	cout << "Game End\n";
 	//print statistics
+
+	//close the curse reader
 	endwin();
 }
 
@@ -172,12 +173,57 @@ void ReflexGame::initializeTimeChange(bool& timeChange, int& changeTime){
 }
 
 void ReflexGame::printReactors(){
+	cout << "Numbers to react to: ";
+	for (int i = 0; i < reactors.size(); i++){
+		cout << reactors[i] << " ";
+	}
+	cout << "\033[4;1H" << endl;
+}
 
+void ReflexGame::changeReactors(){
+	std::mt19937 generator(rd());
+	std::uniform_int_distribution<int> range(0,9);
+	int size = reactors.size();
+	int num = 0;
+	
+	//determine what to do
+	if (size == 0){
+		//can add
+		num = 0;
+	}else if (size == 1){
+		//can add or change
+		std::uniform_int_distribution<int> choice(0,1);
+		num = choice(generator);
+	}else if (size == vectorMax){
+		//can remove or change
+		std::uniform_int_distribution<int> choice(1,2);
+		num = choice(generator);
+	}else{
+		//can add, remove, or change
+		std::uniform_int_distribution<int> choice(0,2);
+		num = choice(generator);
+	}
+	
+	//change the vector
+
+	//get an element and make sure it doesnt already exist
+	int newElement = range(generator);
+
+	if (num == 0){ //add
+		reactors.push_back(newElement);
+	}else {
+		std::uniform_int_distribution<int> element(0, size-1);
+		//get a random index
+		int index = element(generator);
+		if (num == 1){ //change
+			int oldElement = reactors.at(index);
+			while (newElement == oldElement){newElement = range(generator);}
+			reactors.at(index) = newElement;
+		}else{ //erase
+			reactors.erase(reactors.begin() + index);		
+		}
+	}	
+	
+	//print the change
+	printReactors();
 }
-/*
-int main(){
-	ReflexGame game;
-	game.runGame();
-	return 0;
-}
-*/
