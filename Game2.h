@@ -4,6 +4,9 @@
 #include <string>
 #include <curses.h>
 #include <chrono>
+#include <vector>
+#include <random>
+#include <algorithm>
 
 class ReflexGame{
 	public:
@@ -18,6 +21,7 @@ class ReflexGame{
 		void gameStart();
 		void printReactors();
 		void initializeTimeChange(bool&, int&);
+		void changeReactors();
 	
 		/*** variables ***/
 		//score is average reflex in seconds
@@ -30,8 +34,9 @@ class ReflexGame{
 		std::string warning;
 		int changeTimeMS;
 		bool timeChange;
-		//what nseeds to be reacted to
-		int reactors[];
+		std::vector<int> reactors;
+		int vectorMax;
+		std::random_device rd;
 };//end of format class
 
 #endif
