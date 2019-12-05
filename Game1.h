@@ -21,6 +21,8 @@ class Quiz{
 	Quiz();
 	int runGame(const std::string fileName);
 	void PrintScore();
+	int run();
+	std::vector<std::string> files;
 	std::vector<Question> choices;
 	int score;
     private:
