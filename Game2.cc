@@ -1,16 +1,18 @@
 #include "Game2.h"
 //#include "Communicator.cc"
 #include <iostream>
+#include <thread>
+#include <future>
 
 using namespace std;
 
 ReflexGame::ReflexGame(){	
-	reaction = false;
 	difficulty = -1;
 	score = 0;
 	difficultyStr = "";
 	warning = "Game Start";
-	vectorMax = 0;
+	speedDecr = true;
+	multiplier = 0.6;
 }//end of constructor
 
 int ReflexGame::runGame(){
@@ -38,10 +40,19 @@ bool ReflexGame::validate(int input){
 		char confirm = '\0';
 		if (input == 1){
 			difficultyStr = "Easy";
+			speed = 8;
+			minSpeed = 3.5;
+			vectorMax = 2;
 		}else if (input == 2){
 			difficultyStr = "Medium";
+			speed = 7;
+			minSpeed = 2.5;
+			vectorMax = 3;
 		}else{
 			difficultyStr = "Hard";
+			speed = 5;
+			minSpeed = 1.5;
+			vectorMax = 5;
 		}
 		cout << "You have selected " << difficultyStr << " Is this correct? (Y/N)\n";
 		cin >> confirm;
@@ -96,6 +107,7 @@ void ReflexGame::printSelection(){
 }
 
 void ReflexGame::gameStart(){
+
 	bool cont = true;
 	
 	//this is used with changeTime
@@ -114,42 +126,98 @@ void ReflexGame::gameStart(){
 	auto staticWarnTime = staticChangeTime - chrono::milliseconds(changeTimeMS);
 
 	auto nextWarnTime = currentTime + staticWarnTime;
-	
-	if (difficulty == 1){
-		vectorMax = 2;
-	}else if (difficulty == 2){
-		vectorMax = 3;
-	}else{
-		vectorMax = 5;
-	}
+
+	auto nextReactorTime = currentTime + chrono::duration<double>(speed);
 	
 	//add the initial element
-	changeReactors();
+	changeReactors();	
+
+	//generate the RNG line
+	generateReaction();
 	
-	while ( currentTime < endTime ){
-		//check if warning needs to be made
-		if (timeChange && (currentTime >= nextWarnTime) && !warned){
-			auto seconds = changeTimeMS/1000;
-			cout << "\033[3;1HWarning: Reactors change in "<< seconds <<" seconds!\033[4;1H" << endl;
-			warned = true;
+	newThread = true;
+		while ( currentTime < endTime){
+			//check if warning needs to be made
+			if (timeChange && (currentTime >= nextWarnTime) && !warned){
+				auto seconds = changeTimeMS/1000;
+				cout << "\033[3;1HWarning: Reactors change in "<< seconds <<" seconds!\033[5;1H" << endl;
+				warned = true;
+			}
+			//update the current time
+			currentTime = chrono::system_clock::now().time_since_epoch();
+			
+			//print reaction
+			if (currentTime >= nextReactorTime){
+				generateReaction();
+				nextReactorTime = nextReactorTime + chrono::duration<double>(speed);
+			}
+
+			//start the input thread if needed
+			//if newThread = true, make thread, set newThread to false
+			if (newThread == true){
+				newThread = false;
+			}
+
+			auto f = async(launch::async, [] {
+				cout << " created second thread" << endl;
+				bool noPause = true;
+				string s = "";
+				while(noPause){
+					auto s = ""s;
+					if (cin >> s){
+						if (s.find('q') != string::npos){
+							return true;
+						}else{
+							cin.clear();
+							cin.ignore(10000, '\n');
+						}
+					}
+				}
+				return false;
+			});
+
+			if (f.get()){
+				//verify that reaction is in reactors
+				newThread = true;
+			}
+			//else if responded == true
+				//increment fail
+			//else, if currentTime >= expectedResponseTime
+				//no response or extra response
+				//update expectedResponseTime
+				//set responded to false
+
+			//every 10 seconds, change array
+			if (currentTime >= nextChangeTime && warned){		
+				cout << "\033[3;1H\033[2K" << "\033[3;1H" << endl;
+				nextWarnTime = nextChangeTime + staticWarnTime;
+				nextChangeTime = nextChangeTime + chrono::milliseconds(10000);
+				warned = false;
+				changeReactors();
+			}
+			//update the current time
+			currentTime = chrono::system_clock::now().time_since_epoch();
 		}
-		//update the current time
-		currentTime = chrono::system_clock::now().time_since_epoch();
-		//every 10 seconds, change array
-		if (currentTime >= nextChangeTime && warned){		
-			cout << "\033[3;1H\033[2K" << "\033[3;1H" << endl;
-			nextWarnTime = nextChangeTime + staticWarnTime;
-			nextChangeTime = nextChangeTime + chrono::milliseconds(10000);
-			warned = false;
-			changeReactors();
-		}
-		//update the current time
-		currentTime = chrono::system_clock::now().time_since_epoch();
-	}
-	
 	
 	cout << "Game End\n";
+	//calculate score	
 	//print statistics
+	
+}
+
+void ReflexGame::generateReaction(){
+	if (speedDecr){	
+		speed = speed - multiplier;
+		if (speed < minSpeed){
+			speed = minSpeed;
+			speedDecr = false;
+		}
+	}
+	
+	std::mt19937 generator(rd());
+	std::uniform_int_distribution<int> range(0,9);
+	reaction = range(generator);
+	cout << "\033[5;1HReaction: " << reaction << endl;
 }
 
 void ReflexGame::initializeTimeChange(bool& timeChange, int& changeTime){
@@ -171,7 +239,7 @@ void ReflexGame::printReactors(){
 	for (int i = 0; i < reactors.size(); i++){
 		cout << reactors[i] << " ";
 	}
-	cout << "\033[4;1H" << endl;
+	cout << "\033[5;1H" << endl;
 }
 
 void ReflexGame::changeReactors(){
@@ -229,4 +297,11 @@ void ReflexGame::changeReactors(){
 	
 	//print the change
 	printReactors();
+}
+
+
+int main(){
+	ReflexGame game;
+	game.runGame();
+	return 0;
 }
