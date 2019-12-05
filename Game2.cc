@@ -96,11 +96,6 @@ void ReflexGame::printSelection(){
 }
 
 void ReflexGame::gameStart(){
-	//start the curse reader for keyboard escaping
-	initscr();
-	//create reactors array
-	//get the first random number
-	//print the first random number and add it to reactors
 	bool cont = true;
 	
 	//this is used with changeTime
@@ -128,7 +123,9 @@ void ReflexGame::gameStart(){
 		vectorMax = 5;
 	}
 	
+	//add the initial element
 	changeReactors();
+	
 	while ( currentTime < endTime ){
 		//check if warning needs to be made
 		if (timeChange && (currentTime >= nextWarnTime) && !warned){
@@ -153,9 +150,6 @@ void ReflexGame::gameStart(){
 	
 	cout << "Game End\n";
 	//print statistics
-
-	//close the curse reader
-	endwin();
 }
 
 void ReflexGame::initializeTimeChange(bool& timeChange, int& changeTime){
@@ -208,6 +202,15 @@ void ReflexGame::changeReactors(){
 
 	//get an element and make sure it doesnt already exist
 	int newElement = range(generator);
+	bool valid = true;
+	while (valid){
+		if (std::find(reactors.begin(), reactors.end(), newElement) != reactors.end()){
+			newElement = range(generator);
+		}else{
+			valid = false;
+		}
+	}
+
 
 	if (num == 0){ //add
 		reactors.push_back(newElement);
