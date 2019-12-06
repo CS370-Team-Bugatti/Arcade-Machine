@@ -151,22 +151,28 @@ void ReflexGame::gameStart(){
 				nextReactorTime = nextReactorTime + chrono::duration<double>(speed);
 			}
 
-			//motion detector got something
+			//motion detector got something	
+	/*
 			if (comm.getMotion()){
-				if (goodReactor()){
+				if (isInReactors(reaction)){
 					score++;
 				}else{
 					score--;
 				}
-				
 				generateReaction();
 				nextReactorTime = nextReactorTime + chrono::duration<double>(speed);
 			}
 
-
+	*/
 			//change what to react to
 			if (currentTime >= nextChangeTime && warned){
+				//failed to react
+				if (isInReactors(reaction)){
+					score--;
+				}
 				cout << "\033[3;1H\033[2K" << "\033[3;1H" << endl;
+				nextWarnTime = nextChangeTime + staticWarnTime;
+				nextChangeTime = nextChangeTime + chrono::milliseconds(10000);
 				warned = false;
 				changeReactors();
 			}
@@ -180,13 +186,6 @@ void ReflexGame::gameStart(){
 	//calculate score	
 	//print statistics
 	cout << "Your score: " << score << endl;
-}
-
-bool ReflexGame::goodReactor(){
-	if (find(reactors.begin(), reactors.end(), reaction) != reactors.end()){
-		return true;
-	}
-	return false;
 }
 
 void ReflexGame::generateReaction(){
@@ -219,6 +218,7 @@ void ReflexGame::initializeTimeChange(bool& timeChange, int& changeTime){
 }
 
 void ReflexGame::printReactors(){
+	cout << "\033[K";
 	cout << "Numbers to react to: ";
 	for (int i = 0; i < reactors.size(); i++){
 		cout << reactors[i] << " ";
@@ -254,15 +254,12 @@ void ReflexGame::changeReactors(){
 
 	//get an element and make sure it doesnt already exist
 	int newElement = range(generator);
-	bool valid = true;
-	while (valid){
-		if (std::find(reactors.begin(), reactors.end(), newElement) != reactors.end()){
-			newElement = range(generator);
-		}else{
-			valid = false;
-		}
-	}
 
+	//element already exists
+	bool bad = isInReactors(newElement);
+	while (bad){
+		bad = isInReactors(range(generator));
+	}
 
 	if (num == 0){ //add
 		reactors.push_back(newElement);
@@ -271,14 +268,23 @@ void ReflexGame::changeReactors(){
 		//get a random index
 		int index = element(generator);
 		if (num == 1){ //change
-			int oldElement = reactors.at(index);
-			while (newElement == oldElement){newElement = range(generator);}
-			reactors.at(index) = newElement;
+			int oldElement = reactors[index];
+			while (newElement == oldElement){ newElement = range(generator);}
+			reactors[index] = newElement;
 		}else{ //erase
 			reactors.erase(reactors.begin() + index);		
 		}
-	}	
+	}
 	
 	//print the change
 	printReactors();
+}
+
+bool ReflexGame::isInReactors(int element){
+	for (int i = 0; i < reactors.size(); i++){
+		if (reactors[i] == element){
+			return true;
+		}
+	}
+	return false;
 }
