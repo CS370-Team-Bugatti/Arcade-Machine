@@ -45,7 +45,6 @@ class ReflexGame{
 		double minSpeed;	
 		bool speedDecr;
 		double multiplier;
-		bool goodReact;
 		Communicator comm;
 };//end of format class
 
