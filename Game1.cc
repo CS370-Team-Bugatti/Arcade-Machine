@@ -102,6 +102,11 @@ int Quiz::runGame(const std::string fileName){
 			qq.PrintA();
 		}//end of else statement
 	}//end of for loop
+	cout << "Would you like to play again?(yes or no)\n";
+	char s;
+	cin >> s;
+	if(s == 'y')
+		score = run();
 	PrintScore();
 	return score;
 }//end of run method
@@ -113,6 +118,8 @@ bool Quiz::ansB(int size, int anss){
 }//end of method
 
 int Quiz::run(){
+	if(score != 0)
+		score = 0;
 	string file;
 	readGF();
 	cout << "Choice a subject\n";
