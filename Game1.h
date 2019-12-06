@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <chrono>
 
 class Question{
     public:
@@ -19,16 +20,16 @@ class Question{
 class Quiz{
     public:
 	Quiz();
+	int run();
+	void addF(std::string nfile);
+	void readGF();
 	int runGame(const std::string fileName);
 	void PrintScore();
-	int run();
 	std::vector<std::string> files;
 	std::vector<Question> choices;
 	int score;
     private:
 	bool ansB(int size, int anss);
 };//end of format class
-
-//std::ostream &operator<<(std::ostream &out, const Format quest);
 
 #endif

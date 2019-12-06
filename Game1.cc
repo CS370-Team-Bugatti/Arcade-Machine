@@ -1,5 +1,4 @@
 #include "Game1.h"
-//#include <Comunicator.h>
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -38,7 +37,6 @@ void Question::rd(std::istream &in){
 			choice.push_back(s);
 		}//end of else statement
 	}//end of while loop
-
 }//end of constructor
 
 void Question::PrintQA(){
@@ -50,7 +48,6 @@ void Question::PrintQA(){
 }//end of method
 	
 void Question::PrintA(){
-	//std::cout << '\n' << choice[ans - 1] << '\n';
 	string a = choice[ans - 1];
 	int ind = a.find_first_of('.');
 	string sub = a.substr(ind+1);
@@ -82,7 +79,7 @@ int Quiz::runGame(const std::string fileName){
 		choices.push_back(q);	
 	}
 	int responce;
-	for(int i = 0; i < 6; i++){
+	for(int i = 0; i < 3; i++){
 		cout << "\033[2J\033[1;1H\n";
 		Question qq = choices[rand() % choices.size()];
 		qq.PrintQA();
@@ -113,4 +110,38 @@ bool Quiz::ansB(int size, int anss){
 	if(anss > size || anss < 0)
 		return true;
 	return false;
+}//end of method
+
+int Quiz::run(){
+	string file;
+	readGF();
+	cout << "Choice a subject\n";
+	for(auto s: files)
+		cout << s << "	";
+	cout << "Other\n";
+	cin >> file;
+	if(!(file.find("ther") > 1)){
+		cout << "Upload file to pi\n"
+			<< "What is the name of the file?\n";
+		cin >> file;
+		addF(file);
+	}//end of if statement
+return runGame(file);
+}//end of run method
+
+void Quiz::addF(std::string nfile){
+	ofstream of("ff.txt", std::ofstream::out);
+	for(auto s: files){
+		of << s << "\n";
+	}//end of for loop
+	of << nfile;
+	of.close();
+}//end of addF
+
+void Quiz::readGF(){
+	ifstream in("ff.txt");
+	string s;
+	while(getline(in,s))
+		files.push_back(s);
+	in.close();
 }//end of method
