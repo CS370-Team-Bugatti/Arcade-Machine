@@ -2,6 +2,7 @@
 #include "Testgame.h"
 #include "Game1.h"
 #include "Game2.h"
+#include "Memory.h" //new game
 #include "Communicator.h"
 #include <iostream>
 #include <sstream>
@@ -43,7 +44,8 @@ void Arcade::selectGame() {
 	cout << "0) Test\n\n";
 	cout << "1) Quiz\n\n";
 	cout << "2) Motion\n\n";
-	cout << "3) Exit";
+	cout << "3) Memory\n\n";
+	cout << "4) Exit";
 	cout << "\n\n------------------------------------------------------\n\n";
 	int choice;
 	cout << "Choice => ";
@@ -61,8 +63,12 @@ void Arcade::selectGame() {
 	else if (choice == 2) {
 		clog << "'" << choice << "' selected.\n";
 		game_selection = "motion";
+	}//addded code here
+	else if (choice == 3){
+		clog << "'" << choice << "' selected.\n";
+		game_selection = "memory";
 	}
-	else if (choice == 3) {
+	else if (choice == 4) {
 		cout << "'" << choice << "' selected. Exiting!\n";
 		exit(1);
 	}
@@ -88,6 +94,10 @@ int Arcade::executeGame() {
 	else if (game_selection == "motion") {
 		ReflexGame Game;
 		temp = Game.runGame();
+	}
+	else if (game_selection == "memory") {
+		Memory Game;
+		temp = Game.runG();
 	}
 	else if (game_selection == "no_selection") { // this shouldn't run
 		cout << "ERROR: No selection made! Exiting!\n";

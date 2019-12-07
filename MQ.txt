@@ -1,0 +1,44 @@
+Q1: What is the record for most consecutive Jeopardy games won?
+1.	34
+2.	18
+3.	4
+4.	74
+4
+
+Q2: When was YouTube created?
+1.	2005
+2.	2002
+3.	2010
+4.	2008
+1
+
+Q3: All of these letters appear on the periodic table, except?
+1.	S
+2.	J
+3.	W
+4.	X
+2
+
+Q4: There is actually a difference between coffins and caskets – coffins are typically tapered and six-sided, while caskets are rectangular.
+1.	True 
+2.	False 
+1
+
+Q5: The cornea is the only part of the body with no blood supply – it gets its oxygen directly from the air.
+1.	True
+2.	False
+1 
+
+Q6: How many countries are there in the world?
+1.	267
+2.	134
+3.	195
+4.	241
+3
+
+Q7: What is the capital of California?
+1.	Los Angeles 
+2.	Sacramento
+3.	Santa Monica
+4.	San Diego 
+2
