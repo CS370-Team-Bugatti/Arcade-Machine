@@ -3,7 +3,6 @@
 
 #include "Communicator.h"
 #include <string>
-#include <curses.h>
 #include <chrono>
 #include <vector>
 #include <random>
@@ -26,7 +25,8 @@ class ReflexGame{
 		void initializeTimeChange(bool&, int&);
 		void changeReactors();
 		void generateReaction();
-		bool goodReactor();
+		bool isInReactors(int num);
+
 	
 		/*** variables ***/
 		//score is average reflex in seconds
