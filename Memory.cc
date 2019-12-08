@@ -3,6 +3,10 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <thread>
+#include <dos.h>
+#include <stdio.h>
+#include <conio.h>
 
 using namespace std;
 
@@ -12,7 +16,7 @@ Memory::Memory() {
 }//end of cons
 
 int Memory::runG(){
-	cout << "\033[2J\033[1;1H" << "\n";
+	cout << "\033[2J\033[1;1H" << endl;
 	cout << "Can You Remember?\n"
 			<< "Lets see ;) :)\n";
 	int dif;
@@ -36,7 +40,7 @@ int Memory::runG(){
 
 bool Memory::check(int ck){
 	if(ck > 2 || ck <= 0){
-		cout << "choice is invalid try again\n";
+		cout << "Choice is invalid try again\n";
 		return false;
 	}//end of if statement
 	return true;
@@ -67,15 +71,15 @@ int Memory::number(){
 		while(inn >> f){
 			pi.push_back(f);
 		}//end of while loop
-		cout << "Okay lets start!!!!Give us your number\n3.";
+		cout << "Okay lets start!!!!\nGive us your number\n3.";
 		inn.close();
 		string s;
-		getline(cin, s);
+		cin >> s;
 		for(int i = 0; i < num; i++){
 			if(s[i] == pi[i])
 				score++;
 		}//end of for loop
-		cout << "Your score is " << score << "out of" << num << '\n';
+		cout << "Your score is " << score << " out of" << num << '\n';
 	}//end of if statement
 	else{
 		int size;
@@ -91,13 +95,16 @@ int Memory::number(){
 			int temp = rand()%9;
 			ran.push_back(temp);
 		}
-		cout << "The Number is";
+		cout << "The Number is: ";
 		for(auto i: ran)
 			cout << i;
-		cout << "\033[2J\033[1;1H\n";//clear screen
+		_sleep(num);
+		cout << "\nTime starts Now!!\n";
+		_sleep(1);
+		cout << "Time has end\033[2J\033[1;1H" << endl;//clear screen
 		cout << "Now what do you remember?\n";
 		string s;
-		getline(cin, s);
+		cin >> s;
 		for(int i = 0; i < num; i++){
 			if(s[i] == ran[i])
 				score++;
@@ -123,7 +130,7 @@ int Memory::pattern(){
 		num = 30;
 	}
 	Communicator input;
-	cout << "You will get " << time << " seconds look at the pattern displayed on the screen, After that you will have to react if the X is in that position";
+	cout << "You will get " << time << " seconds look at the pattern displayed on the screen, After that you will have to react if the X is in that position\n";
 	cout << "We will see what you remember\n";
 	vector<char> pp;
 	for(int i = 1; i <= num; i++){
@@ -136,15 +143,16 @@ int Memory::pattern(){
 	}//end of for loop
 	for(auto c: pp)
 		cout << c;
-	cout << "Time starts now\n";
-	//does the time
+	cout << "\nTime starts now\n";
+	_sleep(num);
 	cout << "Time has ended\n";
-	cout << "\033[2J\033[1;1H\n";//clear screen
+	_sleep(1);
+	cout << "\033[2J\033[1;1H" << endl;//clear screen
 	cout << "Now what did you remember\n";
 	char p;
 	for(int i = 1; i <= num; i++){
-		cout << i << ". Was an x ";
-		bool t = input.getMotion();
+		cout << i << ". Was their an x here?";
+		bool t = input.getMotion();//should always be 10000 akay 10s
 		if(t)
 			p = 'x';
 		else
@@ -153,7 +161,7 @@ int Memory::pattern(){
 			score++;
 		cout << '\n';
 	}//end of for loop
-	cout << score << "is this shit\n";
+	cout << "This is the score " << score << '\n';
 
 	return score;
 }//end of pattern method
