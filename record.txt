@@ -1,2 +1,2 @@
-Game selected: 'motion'
-Score: '0'
+Game selected: 'quiz'
+Score: '2'

@@ -3,11 +3,13 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <unistd.h>
+/*
 #include <thread>
 #include <dos.h>
 #include <stdio.h>
 #include <conio.h>
-
+*/
 using namespace std;
 
 Memory::Memory() {
@@ -98,9 +100,9 @@ int Memory::number(){
 		cout << "The Number is: ";
 		for(auto i: ran)
 			cout << i;
-		_sleep(num);
+//		_sleep(num);
 		cout << "\nTime starts Now!!\n";
-		_sleep(1);
+//		_sleep(1);
 		cout << "Time has end\033[2J\033[1;1H" << endl;//clear screen
 		cout << "Now what do you remember?\n";
 		string s;
@@ -144,15 +146,20 @@ int Memory::pattern(){
 	for(auto c: pp)
 		cout << c;
 	cout << "\nTime starts now\n";
-	_sleep(num);
+//	_sleep(num);
+	sleep(1);
 	cout << "Time has ended\n";
-	_sleep(1);
+//	cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n";
+//	_sleep(1);
 	cout << "\033[2J\033[1;1H" << endl;//clear screen
 	cout << "Now what did you remember\n";
 	char p;
 	for(int i = 1; i <= num; i++){
-		cout << i << ". Was their an x here?";
-		bool t = input.getMotion();//should always be 10000 akay 10s
+		cout << "\n\n" << i << ". Was there an x here?\n\n";
+		bool t = input.getMotion(1, true);//should always be 10000 akay 10s
+	//	cout << input.getMotion(1) << "\n";
+	//	bool t = true;
+	//	cout << boolalpha << "bool: " << t << "\n";
 		if(t)
 			p = 'x';
 		else

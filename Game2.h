@@ -26,7 +26,6 @@ class ReflexGame{
 		void changeReactors();
 		void generateReaction();
 		bool isInReactors(int num);
-
 	
 		/*** variables ***/
 		//score is average reflex in seconds

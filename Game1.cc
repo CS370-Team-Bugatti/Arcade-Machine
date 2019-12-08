@@ -80,7 +80,7 @@ int Quiz::runGame(const std::string fileName){
 	}
 	int responce;
 	for(int i = 0; i < 3; i++){
-		cout << "\033[2J\033[1;1H\n";
+	//	cout << "\033[2J\033[1;1H\n";
 		Question qq = choices[rand() % choices.size()];
 		qq.PrintQA();
                 cout << "Choose your answer: ";
@@ -93,21 +93,23 @@ int Quiz::runGame(const std::string fileName){
 			cin >> responce;
 		}//end of while loop
 		if(qq.answerCheck(responce)){
-			std::cout << "Correct!!!";
+			std::cout << "\n\nCorrect!!!";
 			score++;
 			qq.PrintA();
+			std::cout << "\n\n";
 		}//end of if statement
 		else{
-			std::cout << "Incorrect. The Correct Answer is";
+			std::cout << "\n\nIncorrect. The Correct Answer is";
 			qq.PrintA();
+			std::cout << "\n\n";
 		}//end of else statement
 	}//end of for loop
-	cout << "Would you like to play again?(yes or no)\n";
+	PrintScore();
+	cout << "Would you like to play again?(yes or no) (will result in new score)\n";
 	char s;
 	cin >> s;
 	if(s == 'y')
 		score = run();
-	PrintScore();
 	return score;
 }//end of run method
 

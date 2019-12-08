@@ -12,7 +12,7 @@ ReflexGame::ReflexGame(){
 	difficultyStr = "";
 	warning = "Game Start";
 	speedDecr = true;
-	multiplier = 0.6;
+	multiplier = 1;
 }//end of constructor
 
 int ReflexGame::runGame(){
@@ -41,17 +41,17 @@ bool ReflexGame::validate(int input){
 		if (input == 1){
 			difficultyStr = "Easy";
 			speed = 8;
-			minSpeed = 3.5;
+			minSpeed = 4;
 			vectorMax = 2;
 		}else if (input == 2){
 			difficultyStr = "Medium";
 			speed = 7;
-			minSpeed = 2.5;
+			minSpeed = 3;
 			vectorMax = 3;
 		}else{
 			difficultyStr = "Hard";
 			speed = 5;
-			minSpeed = 1.5;
+			minSpeed = 2;
 			vectorMax = 5;
 		}
 		cout << "You have selected " << difficultyStr << " Is this correct? (Y/N)\n";
@@ -122,70 +122,60 @@ void ReflexGame::gameStart(){
 
 	//set the time in milliseconds for changes
 	auto staticChangeTime = chrono::milliseconds(10000);
-	//set the time in milliseconds for warn time
-	auto staticWarnTime = staticChangeTime - chrono::milliseconds(changeTimeMS);
-
-	auto nextWarnTime = currentTime + staticWarnTime;
-
-	auto nextReactorTime = currentTime + chrono::duration<double>(speed);
 	
 	//add the initial element
 	changeReactors();	
 
 	//generate the RNG line
 	generateReaction();
-
+	
+	cout << "\033[6;1HScore: "<< score << endl;
+bool replied = false;
 		while ( currentTime < endTime){
-			//check if warning needs to be made
-			if (timeChange && (currentTime >= nextWarnTime) && !warned){
-				auto seconds = changeTimeMS/1000;
-				cout << "\033[3;1HWarning: Reactors change in "<< seconds <<" seconds!\033[5;1H" << endl;
-				warned = true;
-			}
 			//update the current time
 			currentTime = chrono::system_clock::now().time_since_epoch();
 			
-			//print reaction
-			if (currentTime >= nextReactorTime){
-				generateReaction();
-				nextReactorTime = nextReactorTime + chrono::duration<double>(speed);
-			}
-
-			//motion detector got something	
-	/*
-			if (comm.getMotion()){
-				if (isInReactors(reaction)){
-					score++;
-				}else{
-					score--;
+			auto nextReactorTime = currentTime + chrono::duration<double>(speed);
+			
+			generateReaction();
+			
+			
+			while (currentTime < nextReactorTime && replied == false){
+		//		cout << "here" << endl;
+				if (comm.getMotion(speed, false)){
+						if (ReflexGame::isInReactors(reaction)){
+							score++;
+						}else{
+							score--;
+						}
+						replied = true;
+						generateReaction();
 				}
-				generateReaction();
-				nextReactorTime = nextReactorTime + chrono::duration<double>(speed);
+				currentTime = chrono::system_clock::now().time_since_epoch();
 			}
-
-	*/
+			
+			if (!replied && ReflexGame::isInReactors(reaction)){
+				score--;
+			}
+			replied = false;
+	
 			//change what to react to
-			if (currentTime >= nextChangeTime && warned){
-				//failed to react
-				if (isInReactors(reaction)){
-					score--;
-				}
+			if (currentTime >= nextChangeTime){
+//cout << "im here" << endl;
 				cout << "\033[3;1H\033[2K" << "\033[3;1H" << endl;
-				nextWarnTime = nextChangeTime + staticWarnTime;
-				nextChangeTime = nextChangeTime + chrono::milliseconds(10000);
-				warned = false;
+				nextChangeTime = currentTime + chrono::milliseconds(10000);
 				changeReactors();
 			}
 
-
+			cout << "\033[6;1HScore: "<< score << endl;
 			//update the current time
+			
 			currentTime = chrono::system_clock::now().time_since_epoch();
 		}
 	
 	cout << "Game End\n";
 	//calculate score	
 	//print statistics
-	cout << "Your score: " << score << endl;
 }
 
 void ReflexGame::generateReaction(){
@@ -199,7 +189,11 @@ void ReflexGame::generateReaction(){
 	
 	std::mt19937 generator(rd());
 	std::uniform_int_distribution<int> range(0,9);
-	reaction = range(generator);
+	int temp = range(generator);
+	while (reaction == temp){
+			temp = range(generator);
+	}
+	reaction = temp;
 	cout << "\033[5;1HReaction: " << reaction << endl;
 }
 
@@ -218,12 +212,15 @@ void ReflexGame::initializeTimeChange(bool& timeChange, int& changeTime){
 }
 
 void ReflexGame::printReactors(){
-	cout << "\033[K";
+		
+	cout << "\033[2K";
 	cout << "Numbers to react to: ";
 	for (int i = 0; i < reactors.size(); i++){
 		cout << reactors[i] << " ";
 	}
 	cout << "\033[5;1H" << endl;
+	
+	cout << reactors.size() << endl;
 }
 
 void ReflexGame::changeReactors(){

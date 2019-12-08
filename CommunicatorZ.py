@@ -6,14 +6,11 @@ import os
 import sys
 
 def wait(p):
-    print("Sensing stopped.")
     os.kill(p, signal.SIGKILL)
 
 def sense():
-    print("Sensing...")
     pir = MotionSensor(4)
     if (pir.wait_for_motion()):
-        print("Motion detected!")
         return 1
 
 def main():

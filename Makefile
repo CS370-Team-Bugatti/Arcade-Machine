@@ -7,7 +7,7 @@ OBJS		= ${C_OBJS}
 # Compiler and loader commands and flags
 CC		= g++
 CC_FLAGS	= -g -Wall -c
-LD_FLAGS	= -g -Wall -lncurses
+LD_FLAGS	= -g -Wall
 
 # Target is the executable
 # Make default will try to complete $(EXE)
