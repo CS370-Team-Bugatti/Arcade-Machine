@@ -41,7 +41,7 @@ void Arcade::selectGame() {
 	cout << "\n\n------------------------------------------------------\n\n";
 	cout << "Welcome to the Arcade Machine!\n\n";
 	cout << "Options:\n\n";
-	cout << "0) Test\n\n";
+//	cout << "0) Test\n\n";
 	cout << "1) Quiz\n\n";
 	cout << "2) Motion\n\n";
 	cout << "3) Memory\n\n";
@@ -110,7 +110,8 @@ int Arcade::executeGame() {
 
 // creates record of gameplay in preparation to send
 string Arcade::createRecord() {
-	clog << "LOG: Arcade.cc: createRecord() method called\n";
+//	clog << "LOG: Arcade.cc: createRecord() method called\n";
+	cout << "Creating Record...\n";
 	stringstream ss;
 	ss << "Game selected: '" << game_selection << "'\n"
 	   << "Score: '" << score << "'";
@@ -119,8 +120,8 @@ string Arcade::createRecord() {
 
 // sends record to database on another computer
 bool Arcade::sendRecord() {
-	clog << "LOG: Arcade.cc: sendRecord() method called\n";
-
+//	clog << "LOG: Arcade.cc: sendRecord() method called\n";
+	cout << "Sending Record...\n";
 	ofstream fss;
 	fss.open("record.txt");
 	fss << record;
