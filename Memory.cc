@@ -18,7 +18,7 @@ Memory::Memory() {
 }//end of cons
 
 int Memory::runG(){
-	cout << "\033[2J\033[1;1H" << endl;
+	cout << "\033[1J\033[1;1H" << endl;
 	cout << "Can You Remember?\n"
 			<< "Lets see ;) :)\n";
 	int dif;
@@ -28,6 +28,7 @@ int Memory::runG(){
 	while(!difficultyL(dif)){
 		cin >> dif;
 	}//end of while loop
+	cout << "\033[1J\033[1;1H" << endl;//clear screen
 	level = dif;
 	//option between number or patters
 	cout << "1: Patterns	2: Numbers\n";
@@ -51,6 +52,7 @@ bool Memory::check(int ck){
 int Memory::number(){
 	int ch;
 	int num;
+	cout << "\033[2J\033[1;1H" << endl;//clear screen
 	cout << "1: PI        2: Random Number\n";
 	cin >> ch;
 	while(!check(ch)){
@@ -65,6 +67,7 @@ int Memory::number(){
 	else {
 		num = 50;
 	}
+	cout << "\033[2J\033[1;1H" << endl;//clear screen
 	if(ch == 1){
 		cout << "Note: we will only take up to the difficulty level\n";
 		ifstream inn("Pi.txt");
@@ -81,7 +84,7 @@ int Memory::number(){
 			if(s[i] == pi[i])
 				score++;
 		}//end of for loop
-		cout << "Your score is " << score << " out of" << num << '\n';
+		cout << "Your score is " << score << " out of " << num << '\n';
 	}//end of if statement
 	else{
 		int size;
@@ -101,9 +104,13 @@ int Memory::number(){
 		for(auto i: ran)
 			cout << i;
 //		_sleep(num);
+		cout << "\nYou will get " << num << " seconds look at the numbers displayed on the screen\n";
 		cout << "\nTime starts Now!!\n";
+		sleep(num);
 //		_sleep(1);
-		cout << "Time has end\033[2J\033[1;1H" << endl;//clear screen
+		cout << "Time has end\n";
+		sleep(1);
+		cout << "\033[2J\033[1;1H" << endl;//clear screen
 		cout << "Now what do you remember?\n";
 		string s;
 		cin >> s;
@@ -143,14 +150,15 @@ int Memory::pattern(){
 			pp.push_back('+');
 		}//end of else statement
 	}//end of for loop
+	sleep(2);
 	for(auto c: pp)
 		cout << c;
 	cout << "\nTime starts now\n";
 //	_sleep(num);
-	sleep(1);
+	sleep(time);
 	cout << "Time has ended\n";
 //	cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n";
-//	_sleep(1);
+	sleep(1);
 	cout << "\033[2J\033[1;1H" << endl;//clear screen
 	cout << "Now what did you remember\n";
 	char p;
@@ -164,7 +172,7 @@ int Memory::pattern(){
 			p = 'x';
 		else
 			p = '+';
-		if(!(p ^ pp[i]))
+		if(p == pp[i])
 			score++;
 		cout << '\n';
 	}//end of for loop

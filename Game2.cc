@@ -146,7 +146,7 @@ bool replied = false;
 						if (ReflexGame::isInReactors(reaction)){
 							score++;
 						}else{
-							score--;
+						//	score--;
 						}
 						replied = true;
 						generateReaction();
@@ -155,7 +155,7 @@ bool replied = false;
 			}
 			
 			if (!replied && ReflexGame::isInReactors(reaction)){
-				score--;
+			//	score--;
 			}
 			replied = false;
 	

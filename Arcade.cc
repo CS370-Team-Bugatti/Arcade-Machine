@@ -128,7 +128,7 @@ bool Arcade::sendRecord() {
 
 	fss.close();	
 
-	system("scp ./record.txt dmstephe@salem.cs.colostate.edu:/s/bach/l/under/dmstephe/CS370/group/SERVER"); // need to make this send without a password required, maybe change where it's going?
+	system("scp ./record.txt dmstephe@oklahoma-city.cs.colostate.edu:/s/bach/l/under/dmstephe/CS370/group/SERVER"); // need to make this send without a password required, maybe change where it's going?
 
 	return true; // when would there be a fail condition?
 }
